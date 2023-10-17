@@ -1,0 +1,23 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {
+      "text": "Correlation",
+      "fontSize": 18,
+      "anchor": "middle",
+      "font": "Poppins, sans-serif",
+      "color": "black"
+    },
+    "width": 300,
+    "height": 300,
+    "data": {
+      "url": "https://raw.githubusercontent.com/makMonash/FIT-3179/main/north_america_data.csv"
+    },
+    "mark": "rect",
+    "encoding": {
+      "x": {"field": "columnx", "type": "nominal", "title": "North America"},
+      "y": {"field": "columny", "type": "nominal", "title": null},
+      "color": {"field": "values", "type": "quantitative", "scale": {"scheme": "viridis"},"title":"Correlation"},
+      "tooltip": {"field": "values", "title": "Correlation"}
+    }
+  }
+  

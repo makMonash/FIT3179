@@ -1,0 +1,81 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Country Annual Ridership in Millions",
+    "fontSize": 18,
+    "anchor": "middle",
+    "font": "Poppins, sans-serif",
+    "color": "black"
+  },
+  "width": 550,
+  "height": 300,
+ 
+
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/makMonash/FIT-3179/main/Mapjson.json",
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+      },
+      "transform": [
+          {
+            "calculate": "'Uptil 2021 No Metro Systems in ' + datum.properties.NAME",
+            "as": "note"
+          }
+        ],
+
+      "mark": {
+        "type": "geoshape",
+        "fill": "#d5cfcf",
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+          "tooltip": {"field": "note"}
+        }
+
+    },
+    
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/makMonash/FIT-3179/main/metro_countries_total.csv"
+      },
+      "transform": [
+          {
+              "calculate": "datum.country === 'United States' ? 'United States of America' : datum.country",
+              "as": "country"
+            },
+          
+        {
+          "lookup": "country",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/makMonash/FIT-3179/main/Mapjson.json",
+              "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+            },
+            "key": "properties.NAME"
+          },
+          "as": "geo"
+          
+        }
+        
+      ],
+      "mark": {"type": "geoshape", "stroke": "#28779f", "strokeWidth": 1},
+      "encoding": {
+        "shape": {"field": "geo", "type": "geojson"},
+        "color": {
+          "field": "annual_ridership_mill",
+          "type": "quantitative",
+          "title": "Annual Ridership (Millions)"
+        },
+        "tooltip": [
+          {"field": "country", "type": "nominal", "title": "Country"},
+          {"field": "annual_ridership_mill", "type": "quantitative", "title": "Annual Ridership", "format": ","},
+          {"field": "inauguration", "type": "quantitative", "title": "Inaugrated in"}
+        ]
+      }
+    }
+    
+  ],
+  "config": {}
+}
