@@ -1,0 +1,121 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Metro Projects Progress",
+    "fontSize": 18,
+    "anchor": "middle",
+    "font": "Poppins, sans-serif",
+    "color": "black"
+  },
+  "background":"white",
+  "width": 550,
+  "height": {"step": 20},
+  "data": {
+    "url": "https://raw.githubusercontent.com/makMonash/FIT-3179/main/metro_countries_in_progress.csv"
+  },
+  "transform": [
+    {
+      "calculate": "datum.region === 'asia' ? 'Asia' : (datum.region === 'latin_america' ? 'South America' : (datum.region === 'north_america' ? 'North America' : (datum.region === 'europe' ? 'Europe' : (datum.region === 'africa' ? 'Africa' : 'Unknown'))))",
+      "as": "region_label"
+    },
+    {
+      "filter": {"not": {"field": "name", "oneOf": ["Ahvaz Metro", "Chelyabinsk Metro"]}}
+
+    }
+    
+  ],
+  "layer": [
+    {
+      "mark": {"type": "rect", "tooltip": true},
+      "encoding": {
+        "y": {
+          "field": "name",
+          "title": "Metro Name",
+          "type": "nominal",
+          "sort": "-x",
+          "axis": {
+            "labelAngle": 0,
+            "titleFontSize": 16
+          }
+        },
+        "x": {
+          "field": "start_construction",
+          "type": "temporal",
+          "title": "Construction Started",
+          "axis": {
+            "labelAngle": 0,
+            "title": "The Construction Progress",
+            "titleFontSize": 16
+          }
+        },
+        "x2": {
+          "field": "planned_opening",
+          "title": "Planned Opening"
+        },
+        "color": {
+          "field": "region_label",
+          "title": "Regions",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Asia", "Europe", "North America", "South America", "Africa"],
+            "range": ["#ADD8E6", "#FFA07A", "#98FB98", "#8A2BE2", "#FFD700"]
+          }
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "baseline": "middle",
+        "align": "right",
+        "dx": -160,
+        "dy": 34,
+        "fontSize": 20
+      },
+      "encoding": {
+        "x": {
+          "aggregate": "min",
+          "field": "planned_opening",
+          "type": "temporal"
+        },
+        "text": {"value": "Asia has the most projects"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "baseline": "middle",
+        "align": "right",
+        "dx": -280,
+        "dy": 260,
+        "fontSize": 13
+      },
+      "encoding": {
+        "x": {
+          "aggregate": "min",
+          "field": "planned_opening",
+          "type": "temporal"
+        },
+        "text": {"value": "Longest Progress"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "baseline": "middle",
+        "align": "right",
+        "dx": -39,
+        "dy": -238,
+        "fontSize": 13
+      },
+      "encoding": {
+        "x": {
+          "aggregate": "min",
+          "field": "planned_opening",
+          "type": "temporal"
+        },
+        "text": {"value": "The most recent Metro System under construction"}
+      }
+    }
+  ]
+}

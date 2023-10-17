@@ -1,0 +1,66 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  
+  "title": {
+    "text": "Top 5 Metro Systems by Length",
+    "fontSize": 18,
+    "anchor": "middle",
+    "font": "Poppins, sans-serif",
+    "color": "black"
+  },
+
+ 
+  "width": 430,
+  "height": 300,
+  "data": {"url": "https://raw.githubusercontent.com/makMonash/FIT-3179/main/metro_countries_cities.csv"},
+  "mark": "bar",
+  "transform": [
+    {
+      
+      "calculate": "datum.region === 'asia' ? 'Asia' : (datum.region === 'latin_america' ? 'South America' : (datum.region === 'north_america' ? 'North America' : (datum.region === 'europe' ? 'Europe' : (datum.region === 'africa' ? 'Africa' : 'Unknown'))))",
+      "as": "region_label"
+    },
+    {
+      "filter": "datum.length_km > 6435"
+    },
+    {
+      "window": [{"op": "row_number", "as": "rank"}],
+      "sort": [{"field": "length_km", "order": "descending"}]
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "length_km",
+      "type": "quantitative",
+      "title": "Length (km)",
+      "axis": {
+        "labelAngle": 0,
+        "titleFontSize": 16
+      }
+    },
+    "y": {
+      "field": "name",
+      "type": "ordinal",
+      "title": "Metro Name",
+      "sort": {"op": "sum", "field": "length_km", "order": "descending"},
+      "axis": {
+        "labelAngle": 0,
+        "titleFontSize": 16
+      }
+    },
+    "color": {
+      "field": "region_label",
+      "type": "nominal",
+      "title":"Region",
+      "scale": {
+        "domain": ["Asia", "Europe", "North America", "South America", "Africa"],
+        "range": ["#ADD8E6", "#FFA07A", "#98FB98", "#8A2BE2", "#FFD700"]
+      }
+    },
+    "tooltip": [
+      {"field": "name", "type": "nominal", "title": "Metro System"},
+      {"field": "length_km", "type": "quantitative", "title": "Length (km)"},
+      {"field": "region_label", "type": "nominal", "title": "Region"}
+    ]
+  }
+}
